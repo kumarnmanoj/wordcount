@@ -46,7 +46,7 @@ public class FileIndexer {
 
             @Override
             public boolean accept(File pathname) {
-                return pathname.getName().endsWith("*.txt");
+                return pathname.getName().endsWith(".txt");
             }
         });
 
