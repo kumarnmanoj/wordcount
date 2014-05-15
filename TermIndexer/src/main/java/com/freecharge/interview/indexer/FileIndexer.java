@@ -3,6 +3,7 @@ package com.freecharge.interview.indexer;
 import com.freecharge.interview.index.WordIndex;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class FileIndexer {
     private WordIndex wordIndex;
@@ -13,9 +14,11 @@ public class FileIndexer {
 
 
     public void indexFile(String fileToIndex) throws Exception {
-        if (fileToIndex.endsWith(".txt")){
-            throw new Exception("Cannot index the file " + fileToIndex + "Supports only text files");
+        if (!fileToIndex.endsWith(".txt")){
+            throw new Exception("Cannot index the file " + fileToIndex + " Supports only text files");
         }
+
+        System.out.println("Indexing the file " + fileToIndex);
 
         BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(fileToIndex)));
 
@@ -27,15 +30,18 @@ public class FileIndexer {
 
         while(charRead != -1){
             for (char c : readBuffer) {
-                if(Character.isAlphabetic(c) && Character.isDigit(c)){
+                if(Character.isAlphabetic(c) || Character.isDigit(c)){
                     wordBuffer.append(c);
                 } else {
-                    wordIndex.indexWord(wordBuffer.toString());
-                    wordBuffer.delete(0, wordBuffer.length() - 1);
+                    String stringToIndex = wordBuffer.toString().trim();
+                    if (!stringToIndex.isEmpty()){
+                        wordIndex.indexWord(stringToIndex);
+                    }
+                    wordBuffer = new StringBuilder();
                 }
             }
-
-            charRead = fileReader.read(readBuffer, start, bufferLength);
+            Arrays.fill(readBuffer, ' ');
+            charRead = fileReader.read(readBuffer, 0, bufferLength);
         }
     }
 

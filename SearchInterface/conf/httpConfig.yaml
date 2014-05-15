@@ -1,0 +1,4 @@
+folderToIndex: /home/indix/toIndex
+http:
+    port: 3141
+    adminPort: 3142
