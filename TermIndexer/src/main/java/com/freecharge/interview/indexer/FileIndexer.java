@@ -2,9 +2,7 @@ package com.freecharge.interview.indexer;
 
 import com.freecharge.interview.index.WordIndex;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class FileIndexer {
     private WordIndex wordIndex;
@@ -14,7 +12,7 @@ public class FileIndexer {
     }
 
 
-    public void IndexFile(String fileToIndex) throws Exception {
+    public void indexFile(String fileToIndex) throws Exception {
         if (fileToIndex.endsWith(".txt")){
             throw new Exception("Cannot index the file " + fileToIndex + "Supports only text files");
         }
@@ -41,6 +39,19 @@ public class FileIndexer {
         }
     }
 
-    public void IndexDirectory(String directory){
+    public void indexDirectory(String directoryPath) throws Exception {
+        File folder = new File(directoryPath);
+
+        File[] txtFilesInTheDirectory = folder.listFiles(new FileFilter() {
+
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.getName().endsWith("*.txt");
+            }
+        });
+
+        for (File file : txtFilesInTheDirectory) {
+            indexFile(file.getAbsolutePath());
+        }
     }
 }
